@@ -90,6 +90,17 @@
 // });
 
 // ================================Middleware із бібліотек=================================
+// import { startServer } from './server.js';
+
+// startServer();
+
+// ==================================Заняття 2=======================================
+import { initMongoDB } from './db/initMongoDB.js';
 import { startServer } from './server.js';
 
-startServer();
+const bootstrap = async () => {
+  await initMongoDB();
+  startServer();
+};
+
+bootstrap();

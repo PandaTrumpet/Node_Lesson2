@@ -1,5 +1,5 @@
 import express from 'express';
-
+import { getAllStudents, getStudentById } from './services/students.js';
 import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
@@ -38,6 +38,10 @@ export const startServer = () => {
       error: err.message,
     });
   });
+
+  app.get('/students', async (req, res) => {});
+
+  app.get('/students/:studentId', async (req, res) => {});
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
