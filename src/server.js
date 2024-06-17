@@ -1,8 +1,9 @@
 import express from 'express';
-import { getAllStudents, getStudentById } from './services/students.js';
+import { getAllStudents, getStudentById } from './service/students.js';
 import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
+// import { get } from 'mongoose';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -25,6 +26,25 @@ export const startServer = () => {
       message: 'Hello world!',
     });
   });
+  app.get('/students', async (req, res) => {
+    const students = await getAllStudents();
+    res.status(200).json({
+      data: students,
+    });
+  });
+
+  app.get('/students/:studentId', async (req, res) => {
+    const { studentId } = req.params;
+    const student = await getStudentById(studentId);
+    if (!student) {
+      res.status(404).json({
+        message: 'Student not found',
+      });
+    }
+    res.status(200).json({
+      data: student,
+    });
+  });
 
   app.use('*', (req, res, next) => {
     res.status(404).json({
@@ -38,10 +58,6 @@ export const startServer = () => {
       error: err.message,
     });
   });
-
-  app.get('/students', async (req, res) => {});
-
-  app.get('/students/:studentId', async (req, res) => {});
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
